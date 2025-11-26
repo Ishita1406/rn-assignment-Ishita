@@ -1,50 +1,116 @@
-# Welcome to your Expo app 👋
+QuickConvert
+============
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+**QuickConvert** is a small React Native app built with Expo that allows users to quickly convert units of **length** and **temperature**. The app provides a live conversion as the user types and supports switching between units easily.
 
-## Get started
+* * * * *
 
-1. Install dependencies
+📦 Features
+-----------
 
-   ```bash
-   npm install
-   ```
+-   **Length conversions**: Meters ↔ Feet ↔ Inches ↔ Kilometers ↔ Miles
 
-2. Start the app
+-   **Temperature conversions**: Celsius ↔ Fahrenheit
 
-   ```bash
-   npx expo start
-   ```
+-   **Live conversion**: Shows the result as you type
 
-In the output, you'll find options to open the app in a
+-   **Swap units**: Flip between "from" and "to" units
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+-   **Input validation**: Only allows numbers and decimal points
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+-   **Clean UI**: Simple, intuitive, and responsive design
 
-## Get a fresh project
+* * * * *
 
-When you're ready, run:
+🗂 Folder Structure
+-------------------
 
-```bash
-npm run reset-project
+```
+/converter
+  /src
+    /components
+      ConverterForm.js       # Main conversion form component
+      TabSelector.js         # Category selector (Length / Temperature)
+    /screens
+      Home.js                # Main screen
+  App.js                     # Entry point
+  /utils
+    conversions.js            # Helper functions for conversions
+  /types
+    index.ts                  # Type definitions for Category & Unit`
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+* * * * *
 
-## Learn more
+⚙️ Installation
+---------------
 
-To learn more about developing your project with Expo, look at the following resources:
+1.  Clone the repository:
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+2.  Install dependencies:
+   `npm install`
 
-## Join the community
+3.  Start the app with Expo:
+   `npx expo start`
 
-Join our community of developers creating universal apps.
+4.  Scan the QR code with Expo Go (iOS/Android) or run on a simulator.
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+* * * * *
+
+📝 Usage
+--------
+
+1.  Open the app.
+
+2.  Select the category: **Length** or **Temperature**.
+
+3.  Enter a numeric value in the "From" input.
+
+4.  Pick the "From" and "To" units (or swap using the arrow button).
+
+5.  See the converted value instantly in the result box.
+
+* * * * *
+
+💻 Code Highlights
+------------------
+
+-   **Controlled input** ensures only valid numbers are processed.
+
+-   **Live conversion** via `useEffect` for instant feedback.
+
+-   **Separation of concerns**:
+
+    -   `ConverterForm` handles conversion logic and UI
+
+    -   `TabSelector` handles category selection
+
+    -   `utils/conversions.js` contains reusable conversion functions
+
+* * * * *
+
+🧪 Conversions
+--------------
+
+-   **Length**: Meters, Feet, Inches, Kilometers, Miles
+
+-   **Temperature**: Celsius, Fahrenheit
+
+**Helper Functions**:
+
+-   `convertLength(value, from, to)`
+
+-   `convertTemperature(value, from)`
+
+-   `calculateConversion(inputValue, from, to)`
+
+* * * * *
+
+🎨 UI
+-----
+
+-   Uses **React Native components**: `TextInput`, `Picker`, `Text`, `TouchableOpacity`
+
+-   Styled with **StyleSheet** and **Tailwind-like classes** for simplicity
+
+-   Responsive design for both light and dark screens
