@@ -92,7 +92,7 @@ export const ConverterForm: React.FC<ConverterFormProps> = ({ category }) => {
           onChangeText={handleInputChange}
           placeholder="0"
           keyboardType="numeric"
-          className="w-full px-4 py-4 text-3xl font-semibold text-slate-900 bg-white border border-slate-200 rounded-2xl"
+          className="w-full px-4 py-4 text-3xl font-semibold text-slate-900 bg-white border border-slate-200 rounded-2xl mb-3"
         />
       </View>
 
@@ -122,7 +122,7 @@ export const ConverterForm: React.FC<ConverterFormProps> = ({ category }) => {
       <View className="flex items-center">
         <TouchableOpacity
           onPress={handleFlip}
-          className="p-3 rounded-full bg-slate-100 border border-slate-200"
+          className="p-3 rounded-full bg-slate-100 border border-slate-200 m-2"
         >
           <ArrowRightLeft size={24} color="#475569" />
         </TouchableOpacity>

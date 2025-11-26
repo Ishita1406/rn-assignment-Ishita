@@ -19,7 +19,7 @@ const App: React.FC = () => {
     >
       {/* Header */}
       <View className="items-center mb-8">
-        <Text className="text-4xl font-extrabold text-slate-900 tracking-tight">
+        <Text className="text-4xl font-extrabold text-slate-900 tracking-tight mt-10">
           Quick
           <Text className="text-indigo-600">Convert</Text>
         </Text>
