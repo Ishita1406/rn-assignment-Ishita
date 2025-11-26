@@ -18,3 +18,8 @@ export interface ConversionResult {
   value: string;
   unit: Unit;
 }
+
+export default {
+  Category,
+  Unit,
+};

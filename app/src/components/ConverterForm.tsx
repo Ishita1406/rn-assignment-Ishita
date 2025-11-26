@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { View, Text, TextInput, TouchableOpacity } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import { ArrowRightLeft } from 'lucide-react-native';
+import React, { useCallback, useEffect, useState } from 'react';
+import { StyleSheet, Text, TextInput, TextStyle, TouchableOpacity, View, ViewStyle } from 'react-native';
 import { Category, Unit } from '../types';
 import { calculateConversion } from '../utils/conversions';
 
@@ -29,14 +29,12 @@ export const ConverterForm: React.FC<ConverterFormProps> = ({ category }) => {
   const [fromUnit, setFromUnit] = useState<Unit>(Unit.METER);
   const [toUnit, setToUnit] = useState<Unit>(Unit.FEET);
 
-  // Get appropriate units based on category
   const getUnits = useCallback(() => {
     if (category === Category.LENGTH) {
       return isFlipped
         ? { from: toUnit, to: fromUnit }
         : { from: fromUnit, to: toUnit };
     } else {
-      // For temperature, we only have two units that we flip
       return isFlipped
         ? { from: Unit.FAHRENHEIT, to: Unit.CELSIUS }
         : { from: Unit.CELSIUS, to: Unit.FAHRENHEIT };
@@ -70,20 +68,22 @@ export const ConverterForm: React.FC<ConverterFormProps> = ({ category }) => {
     setIsFlipped(!isFlipped);
   };
 
-  // Get the appropriate units for the current category
   const getCurrentUnits = () => {
-    if (category === Category.LENGTH) {
-      return LENGTH_UNITS;
-    } else {
-      return TEMPERATURE_UNITS;
-    }
+    return category === Category.LENGTH ? LENGTH_UNITS : TEMPERATURE_UNITS;
   };
+
+  const fixedPickerTextColor = styles.textDark; 
+  
+  const resultTextStyle = result ? styles.resultTextValue : styles.resultTextPlaceholder;
 
   return (
     <View className="space-y-6">
       {/* INPUT */}
       <View>
-        <Text className="text-sm font-medium text-slate-500 mb-2">
+        <Text
+          style={styles.label}
+          className="text-sm font-medium mb-2"
+        >
           From ({from})
         </Text>
 
@@ -91,28 +91,32 @@ export const ConverterForm: React.FC<ConverterFormProps> = ({ category }) => {
           value={inputValue}
           onChangeText={handleInputChange}
           placeholder="0"
+          placeholderTextColor="#94a3b8"
           keyboardType="numeric"
-          className="w-full px-4 py-4 text-3xl font-semibold text-slate-900 bg-white border border-slate-200 rounded-2xl mb-3"
+          style={[styles.inputBase, styles.fixedInputStyle]} 
+          className="w-full px-4 py-4 text-3xl font-semibold rounded-2xl mb-3"
         />
       </View>
 
-      <View className="bg-slate-100 rounded-2xl border border-slate-200 overflow-hidden">
+      {/* SELECT PICKER */}
+      <View
+        style={[styles.pickerContainer, styles.fixedPickerStyle]} 
+        className="rounded-2xl border overflow-hidden"
+      >
         <Picker
           selectedValue={from}
           onValueChange={(value) => {
-            if (category === Category.LENGTH) {
-              setFromUnit(value);
-            }
-            // For temperature, we don't need to set fromUnit since it's handled by the flip
+            if (category === Category.LENGTH) setFromUnit(value);
           }}
-          enabled={category === Category.LENGTH} // Only enable picker for length
-          className="w-full px-4 py-4 bg-white border border-slate-200 rounded-2xl"
+          enabled={category === Category.LENGTH}
+           style={fixedPickerTextColor} 
         >
           {getCurrentUnits().map((unit) => (
             <Picker.Item 
               key={unit.value} 
               label={unit.label} 
               value={unit.value} 
+              color={'#000'} 
             />
           ))}
         </Picker>
@@ -122,30 +126,100 @@ export const ConverterForm: React.FC<ConverterFormProps> = ({ category }) => {
       <View className="flex items-center">
         <TouchableOpacity
           onPress={handleFlip}
-          className="p-3 rounded-full bg-slate-100 border border-slate-200 m-2"
+          style={styles.swapButton}
+          className="p-3 rounded-full border m-2"
         >
           <ArrowRightLeft size={24} color="#475569" />
         </TouchableOpacity>
       </View>
 
       {/* RESULT BOX */}
-      <View className="p-6 bg-slate-900 rounded-2xl relative overflow-hidden">
-        <View className="absolute top-0 right-0 w-32 h-32 bg-indigo-500/20 rounded-full blur-2xl -mr-8 -mt-8" />
+      <View
+        style={styles.resultBox}
+        className="p-6 rounded-2xl relative overflow-hidden"
+      >
+        <View
+          style={styles.resultAccent}
+          className="absolute top-0 right-0 w-32 h-32 rounded-full blur-2xl -mr-8 -mt-8"
+        />
 
-        <Text className="text-sm font-medium text-indigo-200 mb-2">
+        <Text
+          style={styles.resultLabel}
+          className="text-sm font-medium mb-2"
+        >
           To ({to})
         </Text>
 
         <View className="flex-row items-end">
-          <Text className={`text-4xl font-bold ${result ? 'text-white' : 'text-slate-500'}`}>
+          <Text
+            style={[styles.resultTextBase, resultTextStyle]}
+            className="text-4xl font-bold"
+          >
             {result || '...'}
           </Text>
 
           {result !== '' && (
-            <Text className="ml-2 text-2xl text-indigo-300 font-medium">{to}</Text>
+            <Text style={styles.resultUnit} className="ml-2 text-2xl font-medium">
+              {to}
+            </Text>
           )}
         </View>
       </View>
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  textDark: { color: '#000' } as TextStyle,
+
+  fixedInputStyle: {
+    backgroundColor: '#ffffff',
+    borderColor: '#e2e8f0',
+    color: '#0f172a', 
+  } as TextStyle,
+  fixedPickerStyle: {
+    backgroundColor: '#f1f5f9',
+    borderColor: '#e2e8f0',
+  } as ViewStyle,
+
+  label: {
+    color: '#64748b',
+  } as TextStyle,
+  inputBase: {
+    borderWidth: 1,
+  } as TextStyle,
+
+  pickerContainer: {
+    borderWidth: 1,
+  } as ViewStyle,
+
+  swapButton: {
+    backgroundColor: '#f1f5f9',
+    borderColor: '#e2e8f0',
+    borderWidth: 1,
+  } as ViewStyle,
+
+  resultBox: {
+    backgroundColor: '#0f172a',
+  } as ViewStyle,
+  resultAccent: {
+    backgroundColor: 'rgba(79,70,229,0.15)',
+  } as ViewStyle,
+  resultLabel: {
+    color: '#c7d2fe',
+  } as TextStyle,
+  resultTextBase: {
+    fontWeight: 'bold',
+  } as TextStyle,
+  resultTextValue: {
+    color: '#ffffff',
+  } as TextStyle,
+  resultTextPlaceholder: {
+    color: '#64748b', 
+  } as TextStyle,
+  resultUnit: {
+    color: '#a5b4fc', 
+  } as TextStyle,
+});
+
+export default ConverterForm;

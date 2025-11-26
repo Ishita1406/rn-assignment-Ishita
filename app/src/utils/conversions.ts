@@ -1,8 +1,5 @@
 import { Unit } from '../types';
 
-/**
- * Formats a number to a max of 4 decimal places, removing trailing zeros.
- */
 const formatNumber = (num: number): string => {
   if (!Number.isFinite(num)) return '';
   return parseFloat(num.toFixed(4)).toString();
@@ -69,9 +66,14 @@ export const calculateConversion = (inputValue: string, from: Unit, to: Unit): s
   if ([Unit.METER, Unit.FEET, Unit.INCH, Unit.KILOMETER, Unit.MILE].includes(from)) {
     result = convertLength(num, from, to);
   } else {
-    // Celsius ↔ Fahrenheit
     result = from === Unit.CELSIUS ? (num * 9) / 5 + 32 : ((num - 32) * 5) / 9;
   }
 
   return parseFloat(result.toFixed(4)).toString();
+};
+
+export default {
+    calculateConversion,
+    convertTemperature,
+    convertLength,
 };
